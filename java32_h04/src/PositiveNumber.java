@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.InputMismatchException;
 
 public class PositiveNumber {
 
@@ -8,9 +9,10 @@ public class PositiveNumber {
 	
 	public static void main(String[] args) {
 		PositiveNumber n = new PositiveNumber();
+		n.setDecimal("15");
 		n.setHexadecimal("FC2");
-		n.setBinary("110101");
 		System.out.println(n.getDecimal());
+		System.out.println(n.getHexadecimal());
 	}
 	
 	public PositiveNumber() {
@@ -41,11 +43,37 @@ public class PositiveNumber {
 	}
 	
 	public String getHexadecimal() {
-		return null;
+		return toBase(16);
 	}
 	
 	public String getBinary() {
+		return toBase(2);
+	}
+	
+	private Character getKey(int value) {
+		for (Character e : map.keySet()) {
+			if (map.get(e) == value) {
+				return e;
+			}
+		}
 		return null;
+	}
+	
+	private String toBase(int base) {
+		if (base > 16) {
+			throw new InputMismatchException();
+		}
+		String ergebnis = "";
+		int v = this.value;
+		int rest = v % base;
+		int erg = (v - rest) / base;
+		while (erg != 0) {
+			ergebnis = getKey(rest) + ergebnis;
+			rest = erg % base;
+			erg = (erg - rest) / base;
+		}
+		ergebnis = getKey(rest) + ergebnis;
+		return ergebnis;
 	}
 	
 	private int toDecimal(String input, int base) {
